@@ -1,18 +1,21 @@
 #include <stdio.h>
-#include "config.h"
 #include "utils.h"
+#include "estoque.h"
 
 int main(){
-    int codigo, quantidade;
-    float preco;
-    char nome[TAM_NOME];
+    int codigo, posicao;
 
-    codigo = lerIntMin("Codigo: ", 1);
-    lerTexto("Nome: ", nome, TAM_NOME);
-    preco = lerFloatMin("Preco: ", 0.0);
-    quantidade = lerIntMin("Quantidade: ", 0);
+    cadastrarProduto();
+    cadastrarProduto();
 
-    printf("%d - %s - R$ %.2f - %d un\n", codigo, nome, preco, quantidade);
+    codigo = lerInt("Buscar codigo: ");
+    posicao = buscarProduto(codigo);
+
+    if (posicao == -1) {
+        printf("Produto nao encontrado.\n");
+    } else {
+        printf("Produto encontrado na posicao %d.\n", posicao);
+    }
 
     return 0;
 }
