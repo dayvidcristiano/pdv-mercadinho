@@ -27,6 +27,7 @@ void cadastrarProduto(void){
         return;
     }
 
+    // repete ate o codigo ser novo
     do {
         novo.codigo = lerIntMin("Codigo: ", 1);
 
@@ -44,4 +45,62 @@ void cadastrarProduto(void){
     totalProdutos++;
 
     printf("Produto cadastrado com sucesso!\n");
+}
+
+static void exibirProduto(const Produto *p){
+    printf("%-8d %-30s R$ %8.2f %6d", p->codigo, p->nome, p->preco, p->quantidade);
+
+    if (p->quantidade < ESTOQUE_BAIXO) {
+        printf("  <-- ESTOQUE BAIXO");
+    }
+
+    printf("\n");
+}
+
+void entradaEstoque(void){
+    int codigo, posicao, quantidade;
+
+    codigo = lerInt("Codigo do produto: ");
+    posicao = buscarProduto(codigo);
+
+    if (posicao == -1) {
+        printf("Produto nao encontrado.\n");
+        return;
+    }
+
+    quantidade = lerIntMin("Quantidade recebida: ", 1);
+    produtos[posicao].quantidade += quantidade;
+
+    printf("Estoque atualizado! %s agora tem %d unidade(s).\n",
+           produtos[posicao].nome, produtos[posicao].quantidade);
+}
+
+void listarEstoque(void){
+    int i;
+
+    if (totalProdutos == 0) {
+        printf("Nenhum produto cadastrado.\n");
+        return;
+    }
+
+    printf("%-8s %-30s %11s %6s\n", "Codigo", "Nome", "Preco", "Qtd");
+
+    for (i = 0; i < totalProdutos; i++) {
+        exibirProduto(&produtos[i]);
+    }
+}
+
+void consultarProduto(void){
+    int codigo, posicao;
+
+    codigo = lerInt("Codigo do produto: ");
+    posicao = buscarProduto(codigo);
+
+    if (posicao == -1) {
+        printf("Produto nao encontrado.\n");
+        return;
+    }
+
+    printf("%-8s %-30s %11s %6s\n", "Codigo", "Nome", "Preco", "Qtd");
+    exibirProduto(&produtos[posicao]);
 }
