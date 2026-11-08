@@ -1,17 +1,18 @@
 #include <stdio.h>
-#include <string.h>
-#include "produto.h"
+#include "config.h"
+#include "utils.h"
 
 int main(){
-    Produto p;
+    int codigo, quantidade;
+    float preco;
+    char nome[TAM_NOME];
 
-    p.codigo = 1;
-    strcpy(p.nome, "Arroz 5kg");
-    p.preco = 25.90;
-    p.quantidade = 10;
-    p.totalVendido = 0;
+    codigo = lerIntMin("Codigo: ", 1);
+    lerTexto("Nome: ", nome, TAM_NOME);
+    preco = lerFloatMin("Preco: ", 0.0);
+    quantidade = lerIntMin("Quantidade: ", 0);
 
-    printf("%d - %s - R$ %.2f - %d un\n", p.codigo, p.nome, p.preco, p.quantidade);
+    printf("%d - %s - R$ %.2f - %d un\n", codigo, nome, preco, quantidade);
 
     return 0;
 }
