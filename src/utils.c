@@ -1,8 +1,16 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #include "utils.h"
 
 #define TAM_LINHA 100
+
+static void lerLinha(char *linha, int tamanho){
+    if (fgets(linha, tamanho, stdin) == NULL) {
+        printf("\nEntrada encerrada.\n");
+        exit(0);
+    }
+}
 
 int lerInt(const char *mensagem){
     char linha[TAM_LINHA] = "";
@@ -11,7 +19,7 @@ int lerInt(const char *mensagem){
 
     do {
         printf("%s", mensagem);
-        fgets(linha, sizeof(linha), stdin);
+        lerLinha(linha, sizeof(linha));
         valido = (sscanf(linha, "%d %c", &valor, &extra) == 1);
 
         if (!valido) {
@@ -44,7 +52,7 @@ float lerFloatMin(const char *mensagem, float minimo){
 
     do {
         printf("%s", mensagem);
-        fgets(linha, sizeof(linha), stdin);
+        lerLinha(linha, sizeof(linha));
         valido = (sscanf(linha, "%f %c", &valor, &extra) == 1);
 
         if (!valido) {
@@ -64,7 +72,7 @@ void lerTexto(const char *mensagem, char *destino, int tamanho){
 
     do {
         printf("%s", mensagem);
-        fgets(linha, sizeof(linha), stdin);
+        lerLinha(linha, sizeof(linha));
         linha[strcspn(linha, "\n")] = '\0';
 
         tam = strlen(linha);
