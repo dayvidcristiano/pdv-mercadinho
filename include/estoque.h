@@ -12,5 +12,6 @@ void consultarProduto(void);
 const Produto *obterProduto(int posicao);
 void baixarEstoque(int posicao, int quantidade);
 int produtoMaisVendido(void);
+int listarEstoqueBaixo(void);
 
 #endif

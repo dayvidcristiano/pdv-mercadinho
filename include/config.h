@@ -5,5 +5,6 @@
 #define MAX_ITENS_VENDA 20
 #define TAM_NOME 31
 #define ESTOQUE_BAIXO 5
+#define DESCONTO_DINHEIRO 0.05
 
 #endif

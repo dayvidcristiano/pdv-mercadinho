@@ -90,8 +90,8 @@ static float exibirCarrinho(const ItemCarrinho carrinho[], int totalItens){
 
 void realizarVenda(void){
     ItemCarrinho carrinho[MAX_ITENS_VENDA];
-    int totalItens = 0, codigo, i;
-    float total, pago;
+    int totalItens = 0, codigo, i, forma;
+    float total, desconto, pago;
 
     printf("Nova venda. Digite 0 no codigo para finalizar.\n");
 
@@ -111,17 +111,39 @@ void realizarVenda(void){
     total = exibirCarrinho(carrinho, totalItens);
 
     do {
-        pago = lerFloatMin("Valor pago (0 para cancelar a venda): ", 0.0);
+        forma = lerInt("Pagamento (1 = Dinheiro com 5% de desconto | 2 = Cartao): ");
 
-        if (pago == 0 && total > 0) {
-            printf("Venda cancelada.\n");
-            return;
+        if (forma != 1 && forma != 2) {
+            printf("Opcao invalida!\n");
         }
+    } while (forma != 1 && forma != 2);
 
-        if (pago < total) {
-            printf("Valor insuficiente! Faltam R$ %.2f\n", total - pago);
-        }
-    } while (pago < total);
+    if (forma == 1) {
+        desconto = total * DESCONTO_DINHEIRO;
+        desconto = (int)(desconto * 100 + 0.5) / 100.0;
+        total -= desconto;
+        printf("Desconto: -R$ %.2f\n", desconto);
+    }
+
+    total = (int)(total * 100 + 0.5) / 100.0;
+    printf("Total a pagar: R$ %.2f\n", total);
+
+    if (forma == 1) {
+        do {
+            pago = lerFloatMin("Valor pago (0 para cancelar a venda): ", 0.0);
+
+            if (pago == 0 && total > 0) {
+                printf("Venda cancelada.\n");
+                return;
+            }
+
+            if (pago < total) {
+                printf("Valor insuficiente! Faltam R$ %.2f\n", total - pago);
+            }
+        } while (pago < total);
+    } else {
+        pago = total;
+    }
 
     for (i = 0; i < totalItens; i++) {
         baixarEstoque(carrinho[i].posicao, carrinho[i].quantidade);

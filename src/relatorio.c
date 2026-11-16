@@ -2,21 +2,38 @@
 #include "produto.h"
 #include "estoque.h"
 #include "venda.h"
+#include "interface.h"
 #include "relatorio.h"
 
 void relatorioDia(void){
     int posicao;
+    char linha[100];
     const Produto *p;
 
-    printf("Vendas realizadas: %d\n", quantidadeVendas());
-    printf("Total arrecadado: R$ %.2f\n", valorArrecadado());
+    linhaBorda();
+
+    snprintf(linha, sizeof(linha), "Vendas realizadas: %d", quantidadeVendas());
+    linhaTexto(linha);
+
+    snprintf(linha, sizeof(linha), "Total arrecadado: R$ %.2f", valorArrecadado());
+    linhaTexto(linha);
 
     posicao = produtoMaisVendido();
 
     if (posicao == -1) {
-        printf("Produto mais vendido: nenhuma venda realizada.\n");
+        linhaTexto("Produto mais vendido: nenhum");
     } else {
         p = obterProduto(posicao);
-        printf("Produto mais vendido: %s (%d unidade(s))\n", p->nome, p->totalVendido);
+        linhaTexto("Produto mais vendido:");
+        snprintf(linha, sizeof(linha), "  %s (%d un)", p->nome, p->totalVendido);
+        linhaTexto(linha);
+    }
+
+    linhaBorda();
+
+    printf("\nAlerta de reposicao:\n");
+
+    if (listarEstoqueBaixo() == 0) {
+        printf("Nenhum produto com estoque baixo.\n");
     }
 }

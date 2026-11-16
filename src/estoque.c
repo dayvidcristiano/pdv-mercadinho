@@ -55,6 +55,7 @@ static const char *situacaoEstoque(const Produto *p){
     return "OK";
 }
 
+// Mostra uma linha de produto na tabela
 static void exibirProduto(const Produto *p){
     tabelaEstoqueLinha(p->codigo, p->nome, p->preco, p->quantidade, situacaoEstoque(p));
 }
@@ -131,4 +132,25 @@ int produtoMaisVendido(void){
     }
 
     return maior;
+}
+
+int listarEstoqueBaixo(void){
+    int i, encontrados = 0;
+
+    for (i = 0; i < totalProdutos; i++) {
+        if (produtos[i].quantidade < ESTOQUE_BAIXO) {
+            if (encontrados == 0) {
+                tabelaEstoqueCabecalho();
+            }
+
+            exibirProduto(&produtos[i]);
+            encontrados++;
+        }
+    }
+
+    if (encontrados > 0) {
+        tabelaEstoqueRodape();
+    }
+
+    return encontrados;
 }
