@@ -2,6 +2,7 @@
 #include "config.h"
 #include "produto.h"
 #include "utils.h"
+#include "interface.h"
 #include "estoque.h"
 
 static Produto produtos[MAX_PRODUTOS];
@@ -27,7 +28,6 @@ void cadastrarProduto(void){
         return;
     }
 
-    // repete ate o codigo ser novo
     do {
         novo.codigo = lerIntMin("Codigo: ", 1);
 
@@ -47,14 +47,16 @@ void cadastrarProduto(void){
     printf("Produto cadastrado com sucesso!\n");
 }
 
-static void exibirProduto(const Produto *p){
-    printf("%-8d %-30s R$ %8.2f %6d", p->codigo, p->nome, p->preco, p->quantidade);
-
+static const char *situacaoEstoque(const Produto *p){
     if (p->quantidade < ESTOQUE_BAIXO) {
-        printf("  <-- ESTOQUE BAIXO");
+        return "BAIXO";
     }
 
-    printf("\n");
+    return "OK";
+}
+
+static void exibirProduto(const Produto *p){
+    tabelaEstoqueLinha(p->codigo, p->nome, p->preco, p->quantidade, situacaoEstoque(p));
 }
 
 void entradaEstoque(void){
@@ -83,11 +85,14 @@ void listarEstoque(void){
         return;
     }
 
-    printf("%-8s %-30s %11s %6s\n", "Codigo", "Nome", "Preco", "Qtd");
+    tabelaEstoqueCabecalho();
 
     for (i = 0; i < totalProdutos; i++) {
         exibirProduto(&produtos[i]);
     }
+
+    tabelaEstoqueRodape();
+    printf("Total de produtos: %d\n", totalProdutos);
 }
 
 void consultarProduto(void){
@@ -101,9 +106,11 @@ void consultarProduto(void){
         return;
     }
 
-    printf("%-8s %-30s %11s %6s\n", "Codigo", "Nome", "Preco", "Qtd");
+    tabelaEstoqueCabecalho();
     exibirProduto(&produtos[posicao]);
+    tabelaEstoqueRodape();
 }
+
 const Produto *obterProduto(int posicao){
     return &produtos[posicao];
 }

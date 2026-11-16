@@ -2,6 +2,7 @@
 #include "config.h"
 #include "produto.h"
 #include "utils.h"
+#include "interface.h"
 #include "estoque.h"
 #include "venda.h"
 
@@ -73,16 +74,17 @@ static float exibirCarrinho(const ItemCarrinho carrinho[], int totalItens){
     float subtotal, total = 0;
     const Produto *p;
 
-    printf("\n%-30s %5s %10s %10s\n", "Produto", "Qtd", "Unitario", "Subtotal");
+    printf("\n");
+    tabelaCarrinhoCabecalho();
 
     for (i = 0; i < totalItens; i++) {
         p = obterProduto(carrinho[i].posicao);
         subtotal = carrinho[i].quantidade * p->preco;
-        printf("%-30s %5d %10.2f %10.2f\n", p->nome, carrinho[i].quantidade, p->preco, subtotal);
+        tabelaCarrinhoLinha(p->nome, carrinho[i].quantidade, p->preco, subtotal);
         total += subtotal;
     }
 
-    printf("TOTAL: R$ %.2f\n", total);
+    tabelaCarrinhoTotal(total);
     return total;
 }
 
