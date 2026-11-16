@@ -104,3 +104,24 @@ void consultarProduto(void){
     printf("%-8s %-30s %11s %6s\n", "Codigo", "Nome", "Preco", "Qtd");
     exibirProduto(&produtos[posicao]);
 }
+const Produto *obterProduto(int posicao){
+    return &produtos[posicao];
+}
+
+void baixarEstoque(int posicao, int quantidade){
+    produtos[posicao].quantidade -= quantidade;
+    produtos[posicao].totalVendido += quantidade;
+}
+
+int produtoMaisVendido(void){
+    int i, maior = -1;
+
+    for (i = 0; i < totalProdutos; i++) {
+        if (produtos[i].totalVendido > 0 &&
+            (maior == -1 || produtos[i].totalVendido > produtos[maior].totalVendido)) {
+            maior = i;
+        }
+    }
+
+    return maior;
+}
