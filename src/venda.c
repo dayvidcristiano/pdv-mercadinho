@@ -88,6 +88,12 @@ static float exibirCarrinho(const ItemCarrinho carrinho[], int totalItens){
     return total;
 }
 
+static void aplicarDesconto(float *total, float *desconto){
+    *desconto = *total * DESCONTO_DINHEIRO;
+    *desconto = (int)(*desconto * 100 + 0.5) / 100.0;
+    *total = *total - *desconto;
+}
+
 void realizarVenda(void){
     ItemCarrinho carrinho[MAX_ITENS_VENDA];
     int totalItens = 0, codigo, i, forma;
@@ -119,9 +125,7 @@ void realizarVenda(void){
     } while (forma != 1 && forma != 2);
 
     if (forma == 1) {
-        desconto = total * DESCONTO_DINHEIRO;
-        desconto = (int)(desconto * 100 + 0.5) / 100.0;
-        total -= desconto;
+        aplicarDesconto(&total, &desconto);
         printf("Desconto: -R$ %.2f\n", desconto);
     }
 
